@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id() @default(autoincrement()) @db.Integer
+  created_at DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updated_at DateTime @default(now()) @updatedAt() @map("updated_at") @db.Timestamptz(3)
+  username   String   @unique()
+  email      String   @unique()
+  password   String
+  admin      Boolean  @default(false)
+  active     Boolean  @default(true)
+
+  operation Operation[]
+
+  @@map("user")
+}
+
+enum OperationType {
+  DEPOSIT
+  WITHDRAW
+  TRANSFER
+}
+
+model Operation {
+  id          Int           @id() @default(autoincrement()) @db.Integer
+  username    String
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime      @default(now()) @updatedAt() @map("updated_at") @db.Timestamptz(3)
+  description String?
+  amount      String
+  currency    String
+  type        OperationType @default(DEPOSIT)
+  tags        Json          @default("{}") @db.JsonB
+
+  User User @relation(fields: [username], references: [username])
+
+  @@map("operation")
+}
