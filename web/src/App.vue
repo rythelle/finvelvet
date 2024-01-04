@@ -23,7 +23,7 @@
       username: 'Rythelle',
       createdAt: '2023-01-01',
       updatedAt: '2023-01-01',
-      amount: '5000',
+      amount: '5.00',
       currency: 'BRL',
       type: 'DEPOSIT',
       description: 'Mercado',
